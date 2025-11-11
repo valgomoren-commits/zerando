@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZerandoNenox</title>
+    <title>Zerando</title>
     
     <style>
         /* --- ESTILOS GERAIS E LAYOUT --- */
@@ -155,7 +155,7 @@
             text-shadow: 0 0 3px black; 
         }
         
-        /* NOVO ESTILO: Personalização para o texto "Nenox" */
+        /* NOVO ESTILO: Personalização para o texto "zerando" */
         #player-name-top {
             color: yellow; /* Cor Amarela */
             font-size: 0.7em; /* Letras Pequenas (mantido) */
@@ -355,7 +355,24 @@
             margin: 10px;
         }
         
-    </style>
+    #volume-control-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; 
+    margin-right: 15px;
+    z-index: 1000;
+}
+
+#volume-slider {
+    width: 80px; 
+    height: 10px;
+}
+
+#volume-control-container label {
+    font-size: 1.2em; 
+    cursor: pointer;
+}
+</style>
 </head>
 <body>
     <div class="game-title">Zerando</div> 
@@ -400,13 +417,16 @@
             <span style="margin-left: 15px; margin-right: 5px; font-weight: bold; font-size: 0.9em;">JOGAR COM:</span>
             <span id="player-select-buttons-inline">
                 </span>
-            
+            <div id="volume-control-container">
+    <label for="volume-slider">🔊</label>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+</div>
             <button id="tutorial-button" style="margin-left: 15px;">TUTORIAL</button>
         </div>
         
         <div id="player">
             <span id="player-value">83</span>
-            <span id="player-name-top">Nenox</span> 
+            <span id="player-name-top">zerando</span> 
         </div>
         
         <div id="paused-overlay">PAUSADO</div> 
@@ -446,6 +466,9 @@
         let isGameOver = false;
         let isPaused = false; 
         let playerScore = 0;
+let backgroundMusic;
+let soundEffect1;
+let soundEffect2;
         let playerValue = 0; 
         let gameTime = 0;
         let level = 1;
@@ -473,10 +496,10 @@
             { type: 'monster', sign: "🧛", points: 3, isFatal: false, isMonster: true }, 
             { type: 'monster', sign: "👽", points: 2, isFatal: false, isMonster: true }, 
             { type: 'monster', sign: "👻", points: 1, isFatal: false, isMonster: true },
-            // NOVO MONSTRO: SEREIA MALVADA (Kena) - Nível Mínimo 2
-            { type: 'monster', sign: "🧜‍♀️", name: "Kena", points: 3, fixedDamage: 3, isFatal: false, isMonster: true, minLevel: 2 },
-            // NOVO MONSTRO: POLVO (Rina) - Adicionado a partir do Nível 3, com Dano na Pontuação
-            { type: 'monster', sign: "🐙", name: "Rina", points: 4, scoreDamage: 4, isFatal: false, isMonster: true, minLevel: 3 } 
+            // NOVO MONSTRO: SEREIA MALVADA (x) - Nível Mínimo 2
+            { type: 'monster', sign: "🧜‍♀️", name: "x", points: 3, fixedDamage: 3, isFatal: false, isMonster: true, minLevel: 2 },
+            // NOVO MONSTRO: POLVO (x) - Adicionado a partir do Nível 3, com Dano na Pontuação
+            { type: 'monster', sign: "🐙", name: "x", points: 4, scoreDamage: 4, isFatal: false, isMonster: true, minLevel: 3 } 
         ];
         
         // --- FUNÇÕES DE GERENCIAMENTO DE ÁUDIO (CORREÇÃO DE AUTOPLAY) ---
@@ -505,7 +528,7 @@ const levelMusicArray = [
         const musicPaused = document.getElementById('musica-pausado');
 
         function initializeAudio() {
-            const manager = document.getElementById('audio-manager');
+            manager = document.getElementById('audio-manager');
             manager.querySelectorAll('audio').forEach(audio => {
                 audioElements[audio.id] = audio;
             });
@@ -623,7 +646,7 @@ playerStates[currentPlayerIndex - 1].nextMusic = playerStates[currentPlayerIndex
             playerScore = state.score;
             playerValue = state.value;
 
-            // playerNameTopElement.textContent = state.name; // COMENTADO: Mantém o texto "Nenox"
+            // playerNameTopElement.textContent = state.name; // COMENTADO: Mantém o texto "zerando"
             // CORRIGIDO: Restaurando a atualização do nível
             // playerNameBottomElement.textContent = `NÍVEL: ${level}`; // REMOVIDO: Elemento de nível removido do HTML
             
@@ -1227,14 +1250,14 @@ const oldPlayerScore = playerScore;
             let monsterValue = 0;
 
             if (operatorData.isMonster) {
-                // MODIFICADO: Usa dano fixo se definido (Ex: Kena)
+                // MODIFICADO: Usa dano fixo se definido (Ex: x)
                 if (operatorData.fixedDamage !== undefined) {
                     monsterValue = operatorData.fixedDamage;
                 } else {
                     monsterValue = generateMonsterValue();
                 }
                 objectDiv.dataset.monsterValue = monsterValue; 
-                // NOVO: Adiciona o dano na pontuação se definido (Ex: Rina)
+                // NOVO: Adiciona o dano na pontuação se definido (Ex: x)
                 if (operatorData.scoreDamage !== undefined) {
                     objectDiv.dataset.scoreDamage = operatorData.scoreDamage;
                 }
@@ -1484,7 +1507,7 @@ const oldPlayerScore = playerScore;
                     let customMessage = null;
                     
                     if (scoreDamage > 0) {
-                        // Monstro que afeta a pontuação (Ex: Rina)
+                        // Monstro que afeta a pontuação (Ex: x)
                         updateScore(-scoreDamage);
                         damageValue = 0; // Não afeta playerValue
                         
@@ -1806,11 +1829,20 @@ const oldPlayerScore = playerScore;
                 playerSelectButtonsContainer.appendChild(button);
             }
             updatePlayerSelectButtonActiveState();
+        }function updateVolume() {
+    const volumeSlider = document.getElementById('volume-slider');
+    const newVolume = parseFloat(volumeSlider.value); 
+
+    for (const id in audioElements) {
+        if (audioElements.hasOwnProperty(id)) {
+            audioElements[id].volume = newVolume;
         }
+    }
+}
 
         // --- INICIALIZAÇÃO E CONTROLES DE INTERFACE (CORREÇÃO DE ÁUDIO INCLUÍDA) ---
         window.onload = () => {
-             initializeWavyTitle(gameTitleElement, "ZerandoNenox"); 
+             initializeWavyTitle(gameTitleElement, "Zerando"); 
 
              document.getElementById('pause-button').onclick = togglePause;
              document.getElementById('reset-button').onclick = fullGameReset; 
@@ -1818,7 +1850,7 @@ const oldPlayerScore = playerScore;
              document.getElementById('tutorial-button').onclick = () => {
                  playFx('som-clique-sair-jogo');
                  alert(
-"Dedico esse jogo para Expedito Alves, o Nenox, que ajuda a implementar melhorias com objetivo de aplicar hábitos saudáveis e divertidos no campo da educação. Abraço. vgm.\\n\\n" +
+"\\n\\n" +
                      "OBJETIVO: Levar o Valor do Jogador (Player Value) para o mais próximo de ZERO (abaixo de 0.001) para subir de Nível.\n" +
                      "CONTROLES: Mova o mouse/dedo para movimentar o jogador. Clique/Toque na tela para atirar.\n" + // Linha atualizada
                      "COLETAR NÚMEROS/OPERADORES para tentar **ZERAR** o valor. " +
@@ -1826,7 +1858,7 @@ const oldPlayerScore = playerScore;
                      "**ATENÇÃO:** A Divisão (/) é BLOQUEADA se o valor do jogador estiver entre -0.25 e 0.25.\n" +
                      "**MONSTROS** subtraem um valor aleatório de -6 a 6 do seu valor e subtraem pontos ao colidir. " +
                      "A Sereia Malvada (🧜‍♀️) aparece a partir do Nível 2 e subtrai um valor fixo de 3. " +
-                     "**O POLVO Rina (🐙) aparece a partir do Nível 3 e desconta 4 pontos da sua pontuação ao colidir.**\n" +
+                     "**O POLVO x (🐙) aparece a partir do Nível 3 e desconta 4 pontos da sua pontuação ao colidir.**\n" +
                      "Atirar em MONSTROS *não-fatais* com valor decimal e mais de 50 pontos **compra correção decimal por 50pts** (Conserta o Decimal para o inteiro mais próximo). " +
                      "Caso contrário, você **GANHA** os pontos do monstro (todos dão pontos). " +
                      "Alguns monstros não-fatais podem vir das laterais com movimento curvo. " +
@@ -1840,7 +1872,7 @@ const oldPlayerScore = playerScore;
              // ADICIONA LISTENERS para desbloquear o áudio no primeiro clique/tecla (Corrigindo o AutoPlay)
              document.addEventListener('click', unlockAudio, { once: true });
              document.addEventListener('keydown', unlockAudio, { once: true });
-             
+             document.getElementById('volume-slider').addEventListener('input', updateVolume);
              selectPlayerCount(1);
         };
         
