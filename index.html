@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zerando</title>
+    <title>ZerandoZambarda</title>
     
     <style>
         /* --- ESTILOS GERAIS E LAYOUT --- */
@@ -155,7 +155,7 @@
             text-shadow: 0 0 3px black; 
         }
         
-        /* NOVO ESTILO: Personalização para o texto "zerando" */
+        /* NOVO ESTILO: Personalização para o texto "zerandoZambarda" */
         #player-name-top {
             color: yellow; /* Cor Amarela */
             font-size: 0.7em; /* Letras Pequenas (mantido) */
@@ -375,7 +375,7 @@
 </style>
 </head>
 <body>
-    <div class="game-title">Zerando</div> 
+    <div class="game-title">ZerandoZambarda</div> 
     
     <div id="audio-manager" style="display: none;">
         <audio id="musica-ambiente" src="audio/musica-ambiente.mp3" loop></audio>
@@ -426,7 +426,7 @@
         
         <div id="player">
             <span id="player-value">83</span>
-            <span id="player-name-top">zerando</span> 
+            <span id="player-name-top">zerandoZambarda</span> 
         </div>
         
         <div id="paused-overlay">PAUSADO</div> 
@@ -496,10 +496,10 @@ let soundEffect2;
             { type: 'monster', sign: "🧛", points: 3, isFatal: false, isMonster: true }, 
             { type: 'monster', sign: "👽", points: 2, isFatal: false, isMonster: true }, 
             { type: 'monster', sign: "👻", points: 1, isFatal: false, isMonster: true },
-            // NOVO MONSTRO: SEREIA MALVADA (x) - Nível Mínimo 2
-            { type: 'monster', sign: "🧜‍♀️", name: "x", points: 3, fixedDamage: 3, isFatal: false, isMonster: true, minLevel: 2 },
-            // NOVO MONSTRO: POLVO (x) - Adicionado a partir do Nível 3, com Dano na Pontuação
-            { type: 'monster', sign: "🐙", name: "x", points: 4, scoreDamage: 4, isFatal: false, isMonster: true, minLevel: 3 } 
+            // NOVO MONSTRO: SEREIA MALVADA (Kiko) - Nível Mínimo 2
+            { type: 'monster', sign: "🧜‍♀️", name: "Kiko", points: 3, fixedDamage: 3, isFatal: false, isMonster: true, minLevel: 2 },
+            // NOVO MONSTRO: POLVO () - Adicionado a partir do Nível 3, com Dano na Pontuação
+            { type: 'monster', sign: "🐙", name: "Viaro", points: 4, scoreDamage: 4, isFatal: false, isMonster: true, minLevel: 3 } 
         ];
         
         // --- FUNÇÕES DE GERENCIAMENTO DE ÁUDIO (CORREÇÃO DE AUTOPLAY) ---
@@ -646,7 +646,7 @@ playerStates[currentPlayerIndex - 1].nextMusic = playerStates[currentPlayerIndex
             playerScore = state.score;
             playerValue = state.value;
 
-            // playerNameTopElement.textContent = state.name; // COMENTADO: Mantém o texto "zerando"
+            // playerNameTopElement.textContent = state.name; // COMENTADO: Mantém o texto "zerandoZambarda"
             // CORRIGIDO: Restaurando a atualização do nível
             // playerNameBottomElement.textContent = `NÍVEL: ${level}`; // REMOVIDO: Elemento de nível removido do HTML
             
@@ -1842,7 +1842,7 @@ const oldPlayerScore = playerScore;
 
         // --- INICIALIZAÇÃO E CONTROLES DE INTERFACE (CORREÇÃO DE ÁUDIO INCLUÍDA) ---
         window.onload = () => {
-             initializeWavyTitle(gameTitleElement, "Zerando"); 
+             initializeWavyTitle(gameTitleElement, "ZerandoZambarda"); 
 
              document.getElementById('pause-button').onclick = togglePause;
              document.getElementById('reset-button').onclick = fullGameReset; 
